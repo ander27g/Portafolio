@@ -1,36 +1,57 @@
 const gnomo = document.getElementById('gnomo');
 const universo = document.getElementById('universo-horizontal');
 
-let scrollTimeout; // Para detectar cuándo dejamos de scrollear
+// Secciones para controlar las animaciones según la posición del scroll
+const secciones = document.querySelectorAll('.seccion');
+
+let scrollTimeout;
 let esperandoFrame = false;
+let ultimoScrollY = window.scrollY;
 
 function actualizarMundo() {
     const scrollActual = window.scrollY;
-    
-    // Calculamos el scroll máximo posible
-    // (Alto total del body) - (Alto de la pantalla visible)
+
+    // --- 1. DIRECCIÓN DEL GNOMO Y REINICIO EN POSICIÓN INICIAL ---
+    if (scrollActual <= 10) {
+        // En la posición inicial siempre mira hacia la derecha
+        gnomo.classList.remove('mirando-izquierda');
+    } else if (scrollActual > ultimoScrollY) {
+        // Avanzando hacia la derecha (Scroll abajo)
+        gnomo.classList.remove('mirando-izquierda');
+    } else if (scrollActual < ultimoScrollY) {
+        // Retrocediendo hacia la izquierda (Scroll arriba)
+        gnomo.classList.add('mirando-izquierda');
+    }
+
+    ultimoScrollY = scrollActual;
+
+    // --- 2. MOVIMIENTO HORIZONTAL DEL MUNDO ---
     const maxScrollVertical = document.body.scrollHeight - window.innerHeight;
-    
-    // Calculamos qué tan ancho es el universo horizontalmente
-    // (Ancho de todas las secciones) - (Ancho de la pantalla visible)
     const maxScrollHorizontal = universo.scrollWidth - window.innerWidth;
     
-    // Sacamos el porcentaje de cuánto hemos bajado (de 0 a 1)
-    const porcentajeProgreso = scrollActual / maxScrollVertical;
-    
-    // Movemos el universo a la izquierda basándonos en ese porcentaje
+    const porcentajeProgreso = maxScrollVertical > 0 ? scrollActual / maxScrollVertical : 0;
     const movimientoX = porcentajeProgreso * maxScrollHorizontal;
+    
     universo.style.transform = `translateX(-${movimientoX}px)`;
 
-    // --- LÓGICA DE ANIMACIÓN DEL GNOMO ---
-    // Si el gnomo estaba pausado, lo ponemos a caminar
+    // --- 3. REANUDAR/PAUSAR ANIMACIÓN DE PIERNAS ---
     if (gnomo.style.animationPlayState !== 'running') {
         gnomo.style.animationPlayState = 'running';
     }
+
+    // --- 4. ACTIVACIÓN DE EFECTOS EN SECCIONES SEGÚN SCROLL ---
+    secciones.forEach((seccion, index) => {
+        const umbralInicio = (index - 0.3) / secciones.length;
+        const umbralFin = (index + 0.8) / secciones.length;
+
+        if (porcentajeProgreso >= umbralInicio && porcentajeProgreso <= umbralFin) {
+            seccion.classList.add('visible');
+        }
+    });
 }
 
+// Evento Scroll Optimizado
 window.addEventListener('scroll', () => {
-    // 1. Ejecutar el movimiento del mundo de forma optimizada
     if (!esperandoFrame) {
         window.requestAnimationFrame(() => {
             actualizarMundo();
@@ -39,11 +60,19 @@ window.addEventListener('scroll', () => {
         esperandoFrame = true;
     }
 
-    // 2. Detener la animación cuando terminamos de scrollear
-    clearTimeout(scrollTimeout); // Reiniciamos el temporizador si seguimos moviendo la rueda
-    
-    // Si pasan 150 milisegundos sin que muevas la rueda, se asume que te detuviste
+    // Quitar la clase de bounce inicial cuando se empieza a scrollear
+    if (window.scrollY > 20 && gnomo.classList.contains('entrada-bounce')) {
+        gnomo.classList.remove('entrada-bounce');
+    }
+
+    // Pausar animación del gnomo cuando se detiene el scroll
+    clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(() => {
         gnomo.style.animationPlayState = 'paused';
-    }, 150); 
+    }, 150);
 }, { passive: true });
+
+// Disparo inicial para cargar la primera sección correctamente
+document.addEventListener('DOMContentLoaded', () => {
+    actualizarMundo();
+});

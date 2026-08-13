@@ -5,49 +5,229 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Portafolio de Anderson, desarrollador y creativo.">
     <title>Portafolio Anderson - Pixel Art</title>
+    
+    <!-- Fuentes Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Handjet:wght@400;700&family=Josefin+Sans:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Íconos de Tecnologías (Devicon CDN) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+    
     <link rel="stylesheet" href="css/style.css">
     <script src="js/script.js" defer></script>
 </head>
 <body>
+    <!-- Botón Flotante de WhatsApp estilo Pixel -->
+    <a href="https://wa.me/573226961489" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-flotante" aria-label="Contacto por WhatsApp">
+        <i class="devicon-whatsapp-plain"></i>
+    </a>
+
     <!-- El gnomo se queda fuera del contenedor para que siempre esté en pantalla -->
-    <div class="gnomo" id="gnomo" aria-hidden="true"></div>
+    <div class="gnomo entrada-bounce" id="gnomo" aria-hidden="true"></div>
 
     <!-- Contenedor fijo que ocupa la pantalla -->
     <main class="marco-pantalla">
         <!-- Contenedor muy ancho que se deslizará horizontalmente -->
         <div class="universo-horizontal" id="universo-horizontal">
             
-            <section id="presentacion" class="seccion">
+            <!-- SECCIÓN 1: PRESENTACIÓN -->
+            <section id="presentacion" class="seccion pixel-centro visible">
                 <div class="contenido-caja">
-                    <h1>¡Hola! Soy Anderson</h1>
-                    <p>Bienvenido a mi aventura creativa.</p>
+                    <h1>¡Bienvenido! Soy Anderson García (Desarrollador Frontend)</h1>
+                    <p>Especialista en construir interfaces web rápidas, 
+                        modulares y escalables. Mi foco está en la solucionar los requerimientos
+                        del cliente: maquetación, gestión eficiente, optimización de renderizado y rendimiento.
+                    </p>
+        
+                    <p>Transformo diseños complejos en código limpio, accesible y mantenible, 
+                        garantizando que cada vista cargue sin lag en cualquier dispositivo.
+                    </p>
+        
+                    <p><em>Haz scroll para inspeccionar mi stack y proyectos</em></p>
                 </div>
             </section>
             
             <div class="espacio-transicion" aria-hidden="true"></div>
 
-            <section id="habilidades" class="seccion">
-                <div class="contenido-caja">
-                    <h2>Mis Habilidades</h2>
-                    <p>El arsenal de mi inventario.</p>
+            <!-- SECCIÓN 2: HABILIDADES (LABORATORIO WEB) -->
+            <section id="habilidades" class="seccion pixel-izq-der">
+                <div class="contenedor-habilidades">
+                    
+                    <div class="titulo-seccion-estante">
+                        <h2>ARSENAL Y HABILIDADES</h2>
+                        <p>Tecnologías para la construcción de sitios y aplicaciones web</p>
+                    </div>
+
+                    <div class="repisa-habilidades">
+                        
+                        <!-- Bloque 1: Frontend & Web Apps -->
+                        <div class="categoria-pociones">
+                            <span class="etiqueta-categoria">Frontend & UI Apps</span>
+                            <div class="grid-iconos">
+                                <div class="slot-item" title="React.js">
+                                    <i class="devicon-react-original colored"></i>
+                                    <span>React.js</span>
+                                </div>
+                                <div class="slot-item" title="TypeScript">
+                                    <i class="devicon-typescript-plain colored"></i>
+                                    <span>TypeScript</span>
+                                </div>
+                                <div class="slot-item" title="JavaScript ES6+">
+                                    <i class="devicon-javascript-plain colored"></i>
+                                    <span>JavaScript</span>
+                                </div>
+                                <div class="slot-item" title="HTML5 & CSS3">
+                                    <i class="devicon-html5-plain colored"></i>
+                                    <span>HTML5 / CSS3</span>
+                                </div>
+                                <div class="slot-item" title="Tailwind CSS">
+                                    <i class="devicon-tailwindcss-original colored"></i>
+                                    <span>Tailwind</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bloque 2: Backend & APIs Web -->
+                        <div class="categoria-pociones">
+                            <span class="etiqueta-categoria">Backend & APIs</span>
+                            <div class="grid-iconos">
+                                <div class="slot-item" title="PHP">
+                                    <i class="devicon-php-plain colored"></i>
+                                    <span>PHP</span>
+                                </div>
+                                <div class="slot-item" title="Laravel">
+                                    <i class="devicon-laravel-original colored"></i>
+                                    <span>Laravel</span>
+                                </div>
+                                <div class="slot-item" title="APIs RESTful">
+                                    <i class="devicon-fastapi-plain colored"></i>
+                                    <span>APIs REST</span>
+                                </div>
+                                <div class="slot-item" title="MySQL Database">
+                                    <i class="devicon-mysql-plain colored"></i>
+                                    <span>MySQL</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bloque 3: Rendimiento & Herramientas -->
+                        <div class="categoria-pociones">
+                            <span class="etiqueta-categoria">Rendimiento & Tools</span>
+                            <div class="grid-iconos">
+                                <div class="slot-item" title="Git / GitHub">
+                                    <i class="devicon-git-plain colored"></i>
+                                    <span>Git</span>
+                                </div>
+                                <div class="slot-item" title="Diseño Responsive / Mobile-First">
+                                    <i class="devicon-chrome-plain colored"></i>
+                                    <span>Responsive</span>
+                                </div>
+                                <div class="slot-item" title="Core Web Vitals & Optimización">
+                                    <i class="devicon-webpack-plain colored"></i>
+                                    <span>Core Web Vitals</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </section>
 
             <div class="espacio-transicion" aria-hidden="true"></div>
 
-            <section id="portafolio" class="seccion">
-                <div class="contenido-caja">
-                    <h2>Mis Proyectos</h2>
-                    <p>Las misiones que he completado.</p>
+            <!-- SECCIÓN 3: PORTAFOLIO (GALERÍA EN PILARES) -->
+            <section id="portafolio" class="seccion pixel-izq-der">
+                <div class="contenedor-portafolio">
+                    
+                    <div class="titulo-seccion-estante">
+                        <h2>GALERÍA DE PROYECTOS</h2>
+                        <p>Misiones completadas y aplicaciones web desplegadas</p>
+                    </div>
+
+                    <div class="galeria-proyectos">
+                        
+                        <!-- Proyecto 1 -->
+                        <article class="cuadro-proyecto cuadro-proyecto1">
+                            <div class="marco-dorado">
+                                <div class="lienzo-imagen">
+                                    <img src="assets/img/itOutsourcingPort.webp" alt="Preview IT Outsourcing">
+                                </div>
+                            </div>
+                            <div class="placa-info">
+                                <h3>IT Outsourcing</h3>
+                                <p>Plataforma B2B para vinculación de talento IT con arquitectura escalable.</p>
+                                <a href="https://www.itoutsourcing.com.co/" target="_blank" rel="noopener noreferrer" class="btn-mision">
+                                    Explorar
+                                </a>
+                            </div>
+                        </article>
+
+                        <!-- Proyecto 2 -->
+                        <article class="cuadro-proyecto cuadro-proyecto2">
+                            <div class="marco-dorado">
+                                <div class="lienzo-imagen">
+                                    <img src="assets/img/HebraWebPort.webp" alt="Preview Hebra Clothing">
+                                </div>
+                            </div>
+                            <div class="placa-info">
+                                <h3>Hebra Clothing</h3>
+                                <p>E-commerce de moda optimizado en pasarela de pagos y experiencia checkout.</p>
+                                <a href="https://hebra.com.co/" target="_blank" rel="noopener noreferrer" class="btn-mision">
+                                    Explorar
+                                </a>
+                            </div>
+                        </article>
+
+                        <!-- Proyecto 3 -->
+                        <article class="cuadro-proyecto cuadro-proyecto3">
+                            <div class="marco-dorado">
+                                <div class="lienzo-imagen">
+                                    <img src="assets/img/importacionesPVCPort.webp" alt="Preview Importaciones PVC">
+                                </div>
+                            </div>
+                            <div class="placa-info">
+                                <h3>Importaciones PVC</h3>
+                                <p>Catálogo web e-commerce industrial enfocado en velocidad e inventario.</p>
+                                <a href="https://landeos.net/importaciones-pvc/" target="_blank" rel="noopener noreferrer" class="btn-mision">
+                                    Explorar
+                                </a>
+                            </div>
+                        </article>
+
+                        <!-- Proyecto 4 -->
+                        <article class="cuadro-proyecto cuadro-proyecto4">
+                            <div class="marco-dorado">
+                                <div class="lienzo-imagen">
+                                    <img src="assets/img/landeosWebPort.webp" alt="Preview Landeos 3D">
+                                </div>
+                            </div>
+                            <div class="placa-info">
+                                <h3>Landeos 3D</h3>
+                                <p>Experiencia web interactiva desarrollada con Three.js y animaciones GSAP.</p>
+                                <a href="https://landeos.net/" target="_blank" rel="noopener noreferrer" class="btn-mision">
+                                    Explorar
+                                </a>
+                            </div>
+                        </article>
+
+                    </div>
                 </div>
             </section>
 
             <div class="espacio-transicion" aria-hidden="true"></div>
 
-            <section id="final" class="seccion">
-                <div class="contenido-caja">
-                    <h2>Hablemos, Contáctame</h2>
-                    <p>Este es el fin de mi viaje.</p>
+            <!-- SECCIÓN 4: FINAL -->
+            <section id="final" class="seccion pixel-izq-der">
+                <div class="mensaje-final">
+                    <h2>INICIA TU PRÓXIMA MISIÓN</h2>
+                    <p>Ya conoces mi trabajo, las tecnologías que domino y el potencial de las experiencias digitales que podemos construir.</p>
+                    <p>Ahora es momento de darle vida a tu próxima idea. El entorno está listo; solo falta tu mensaje para encender los motores.</p>
+                    
+                    <!-- Botón de Contacto (Estilo RPG) -->
+                    <a href="https://wa.me/573226961489" target="_blank" rel="noopener noreferrer" class="btn-contacto">
+                        ENVIAR MENSAJE
+                    </a>
                 </div>
             </section>
 

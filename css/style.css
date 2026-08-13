@@ -1,8 +1,10 @@
 :root {
+    --font-primary: "Handjet", sans-serif;
+    --font-secondary: "Josefin Sans", sans-serif;
     --color-fondo: #111111;
     --color-texto: #ffffff;
+    --color-texto-pergamino: #000000;
     --color-caja-bg: rgba(0, 0, 0, 0.7);
-    --fuente-principal: 'Courier New', Courier, monospace;
     --z-index-gnomo: 1000;
 }
 
@@ -12,20 +14,18 @@
     box-sizing: border-box;
 }
 
-/* Hacemos el body muy alto (500vh) para que el navegador permita hacer scroll largo */
 body {
     height: 500vh; 
     background-color: var(--color-fondo);
     color: var(--color-texto);
-    font-family: var(--fuente-principal);
+    font-family: var(--font-secondary);
     margin: 0;
-    /* overflow-x hidden evita barras de desplazamiento debajo */
     overflow-x: hidden; 
 }
 
-/* El marco que funciona como la "cámara" del jugador */
+/* Marco fijo (Cámara del juego) */
 .marco-pantalla {
-    position: fixed; /* Se queda pegado en la pantalla */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -33,51 +33,534 @@ body {
     overflow: hidden; 
 }
 
-/* El mundo que contiene las secciones una al lado de otra */
+/* Universo horizontal que se desliza */
 .universo-horizontal {
     display: flex;
     height: 100vh;
-    /* will-change optimiza el movimiento horizontal continuo */
     will-change: transform;
 }
 
 .seccion {
-    /* Cada sección ocupa el 100% de la pantalla actual */
     width: 100vw; 
     height: 100vh;
-    flex-shrink: 0; /* Evita que se aplasten */
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-/* Fondos (Recuerda actualizar tu ruta) */
+/* --- ANIMACIONES DE CONSTRUCCIÓN Y TRANSICIONES PIXELADAS --- */
+
+/* Transición Sección 1: Desde el centro hacia los bordes (Pixel Center) */
+.seccion.pixel-centro.visible {
+    opacity: 1;
+    animation: pixelRevealCentro 0.8s steps(6) forwards;
+}
+
+@keyframes pixelRevealCentro {
+    0% { clip-path: circle(0% at 50% 50%); }
+    25% { clip-path: circle(25% at 50% 50%); }
+    50% { clip-path: circle(55% at 50% 50%); }
+    75% { clip-path: circle(85% at 50% 50%); }
+    100% { clip-path: circle(150% at 50% 50%); }
+}
+
+/* Transiciones Secciones 2, 3 y 4: Construcción Pixel de Izquierda a Derecha */
+.seccion.pixel-izq-der.visible {
+    opacity: 1;
+    animation: pixelRevealIzqDer 0.8s steps(6) forwards;
+}
+
+@keyframes pixelRevealIzqDer {
+    0% { clip-path: inset(0 100% 0 0); }
+    20% { clip-path: inset(0 80% 0 0); }
+    40% { clip-path: inset(0 60% 0 0); }
+    60% { clip-path: inset(0 40% 0 0); }
+    80% { clip-path: inset(0 20% 0 0); }
+    100% { clip-path: inset(0 0 0 0); }
+}
+
+/* =========================================================
+   SECCIÓN 1: PRESENTACIÓN
+   ========================================================= */
 #presentacion {
     background-image: url('../assets/img/fondoSection1.webp'); 
     background-size: cover;
     background-position: center;
 }
-#habilidades { background-color: #2c3e50; }
-#portafolio { background-color: #27ae60; }
-#final { background-color: #8e44ad; }
 
-/* Transiciones ahora son anchas en vez de altas */
+/* Efecto de desenvolvir el Pergamino (Top to Bottom scale) */
+#presentacion .contenido-caja { 
+    background-image: url('../assets/img/pergamino.png'); 
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; 
+    text-align: center;
+    padding: 4rem 120px;
+    width: 800px;
+    height: 500px;
+    position: absolute;
+    top: 2%;
+    right: -2%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-texto-pergamino);
+    transform-origin: top center;
+    transform: scaleY(0);
+    opacity: 0;
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
+}
+
+#presentacion.visible .contenido-caja {
+    transform: scaleY(1);
+    opacity: 1;
+}
+
+#presentacion .contenido-caja h1,
+#presentacion .contenido-caja h2 {
+    font-family: var(--font-primary);
+    font-size: 34px;
+    font-weight: 900;
+    color: var(--color-texto-pergamino);
+    margin-bottom: 20px;
+    line-height: 1.1;
+    padding: 0px 30px;
+}
+
+#presentacion .contenido-caja p {
+    font-family: var(--font-secondary);
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--color-texto-pergamino);
+    line-height: 20px;
+    margin-bottom: 0.5rem;
+    padding: 0px 60px 0px 70px;
+}
+
+#presentacion .contenido-caja strong {
+    font-weight: 700;
+    color: var(--color-texto-pergamino);
+}
+
+#presentacion .contenido-caja em {
+    font-style: italic;
+    font-size: 0.95rem;
+}
+
+/* =========================================================
+   SECCIÓN 2: HABILIDADES
+   ========================================================= */
+#habilidades {
+    background-image: url('../assets/img/fondoSection2.webp'); 
+    background-size: cover;
+    background-position: center;
+}
+
+.contenedor-habilidades {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 4vh;
+}
+
+.titulo-seccion-estante {
+    background: rgba(26, 15, 10, 0.88);
+    border: 3px solid #b8860b;
+    outline: 2px solid #000;
+    padding: 10px 30px;
+    text-align: center;
+    border-radius: 4px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+    margin-bottom: 15px;
+}
+
+.titulo-seccion-estante h2 {
+    font-family: var(--font-primary);
+    font-size: 32px;
+    color: #ffd700;
+    text-shadow: 2px 2px 0px #000;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+.titulo-seccion-estante p {
+    font-family: var(--font-secondary);
+    font-size: 14px;
+    color: #e0d0b0;
+    margin-top: 2px;
+}
+
+.repisa-habilidades {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 1000px;
+    width: 90%;
+    margin-top: 15px;
+}
+
+/* Animación Fade-in Suave desde el Centro hacia afuera */
+.categoria-pociones {
+    background: rgba(18, 12, 9, 0.85);
+    border: 2px solid #6d4c33;
+    border-radius: 6px;
+    padding: 15px;
+    flex: 1;
+    text-align: center;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.8), inset 0 0 10px rgba(0,0,0,0.5);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+#habilidades.visible .categoria-pociones:nth-child(2) {
+    transition-delay: 0.2s;
+    opacity: 1;
+    transform: scale(1);
+}
+
+#habilidades.visible .categoria-pociones:nth-child(1),
+#habilidades.visible .categoria-pociones:nth-child(3) {
+    transition-delay: 0.45s;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.etiqueta-categoria {
+    display: inline-block;
+    font-family: var(--font-primary);
+    font-size: 20px;
+    color: #f3a847;
+    border-bottom: 1px solid #6d4c33;
+    padding-bottom: 4px;
+    margin-bottom: 12px;
+    width: 100%;
+    font-weight: 600;
+}
+
+.grid-iconos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.slot-item {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #3a2618;
+    border-radius: 4px;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 75px;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.slot-item:hover {
+    transform: translateY(-4px);
+    border-color: #ffd700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+    background: rgba(40, 25, 15, 0.8);
+}
+
+.slot-item i {
+    font-size: 30px;
+    margin-bottom: 6px;
+}
+
+.slot-item span {
+    font-family: var(--font-secondary);
+    font-size: 12px;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+/* =========================================================
+   SECCIÓN 3: PORTAFOLIO
+   ========================================================= */
+#portafolio { 
+    background-image: url('../assets/img/fondoSection3.webp'); 
+    background-size: cover;
+    background-position: center; 
+}
+
+.contenedor-portafolio {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 4vh;
+}
+
+.galeria-proyectos {
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+    align-items: flex-start;
+    width: 95%;
+    max-width: 1200px;
+    margin-top: 15px;
+}
+
+/* Efecto Zoom-in + Choque/Brinco para clavarse en pilares */
+.cuadro-proyecto {
+    flex: 1;
+    max-width: 260px;
+    padding: 10px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: visible;
+    z-index: 1;
+    opacity: 0;
+    transform: scale(1.7) translateY(-30px);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+}
+
+#portafolio.visible .cuadro-proyecto {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+#portafolio.visible .cuadro-proyecto1 { transition-delay: 0.15s; }
+#portafolio.visible .cuadro-proyecto2 { transition-delay: 0.3s; }
+#portafolio.visible .cuadro-proyecto3 { transition-delay: 0.45s; }
+#portafolio.visible .cuadro-proyecto4 { transition-delay: 0.6s; }
+
+.cuadro-proyecto::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    background-image: url('../assets/img/MarcoCuadro.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 1;
+}
+
+.cuadro-proyecto > * {
+    position: relative;
+    z-index: 2;
+}
+
+.cuadro-proyecto1 { position: absolute; top: 13%; left: 10%; }
+.cuadro-proyecto2 { position: absolute; top: 23%; left: 28%; }
+.cuadro-proyecto3 { position: absolute; top: 23%; left: 55%; }
+.cuadro-proyecto4 { position: absolute; top: 13%; left: 74%; }
+
+/* Mantener Hover Exacto */
+.cuadro-proyecto:hover {
+    transform: translateY(-8px) scale(1.02) !important;
+    border-color: #c8963e;
+}
+
+.marco-dorado {
+    width: 100%;
+    padding: 4px;
+    border-radius: 2px;
+}
+
+.lienzo-imagen {
+    width: 75%;
+    margin: auto;
+    height: auto;
+    overflow: hidden;
+}
+
+.lienzo-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    margin-top: 20px;
+}
+
+.cuadro-proyecto:hover .lienzo-imagen img {
+    transform: scale(1.08);
+}
+
+.placa-info {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.placa-info h3 {
+    font-family: var(--font-primary);
+    font-size: 18px;
+    color: #ffd700;
+    text-shadow: 1px 1px 0px #000;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+.placa-info p {
+    font-family: var(--font-secondary);
+    font-size: 13px;
+    color: #d1c2a5;
+    line-height: 1.35;
+    margin: 0;
+    min-height: 52px; 
+    padding: 0px 25px;
+}
+
+.btn-mision {
+    display: inline-block;
+    font-family: var(--font-primary);
+    font-size: 17px;
+    color: #ffffff;
+    background: #2a1810;
+    border: 2px solid #b8860b;
+    padding: 4px 14px;
+    text-decoration: none;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    text-shadow: 1px 1px 0px #000;
+    margin-top: 4px;
+}
+
+.btn-mision:hover {
+    background: #b8860b;
+    color: #000000;
+    border-color: #ffd700;
+    text-shadow: none;
+    font-weight: bold;
+}
+
+/* =========================================================
+   SECCIÓN 4: FINAL
+   ========================================================= */
+#final { 
+    background-image: url('../assets/img/fondoSection4.webp'); 
+    background-size: cover;
+    background-position: center; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-size 0.5s ease;
+}
+
+/* Movimiento 3D sutil en el fondo al estar visible */
+#final.visible {
+    animation: pixelRevealIzqDer 0.8s steps(6) forwards, movimientoFondo 10s ease-in-out infinite alternate;
+}
+
+@keyframes movimientoFondo {
+    0% { background-position: center center; background-size: 100% 100%; }
+    100% { background-position: 52% 48%; background-size: 105% 105%; }
+}
+
+.mensaje-final {
+    text-align: center;
+    max-width: 850px;
+    padding: 0 20px;
+    transform: translateY(-15%);
+    opacity: 0;
+    transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease;
+}
+
+/* Efecto Bounce de encaje al aparecer */
+#final.visible .mensaje-final {
+    opacity: 1;
+    transform: translateY(-15%) scale(1);
+}
+
+.mensaje-final h2 {
+    font-family: var(--font-primary);
+    font-size: 52px;
+    color: #ffd700;
+    text-shadow: 
+        2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 
+        2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
+        4px 4px 8px rgba(0,0,0,0.8);
+    margin-bottom: 15px;
+    letter-spacing: 2px;
+}
+
+.mensaje-final p {
+    font-family: var(--font-secondary);
+    font-size: 20px;
+    color: #ffffff;
+    font-weight: 700;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    text-shadow: 
+        1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 
+        2px 2px 5px rgba(0,0,0,0.9);
+}
+
+/* Botón con Flotabilidad Sutil */
+.btn-contacto {
+    display: inline-block;
+    font-family: var(--font-primary);
+    font-size: 26px;
+    color: #ffffff;
+    background: #2a1810;
+    border: 2px solid #b8860b;
+    padding: 10px 40px;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    text-shadow: 1px 1px 0px #000;
+    margin-top: 30px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.8);
+    cursor: pointer;
+    animation: flotarBoton 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes flotarBoton {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-8px); }
+}
+
+.btn-contacto:hover {
+    background: #b8860b;
+    color: #000000;
+    border-color: #ffd700;
+    text-shadow: none;
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(184, 134, 11, 0.4);
+}
+
+/* Transiciones inter-sección */
 .espacio-transicion {
     width: 25vw; 
     height: 100vh;
     flex-shrink: 0;
     background: linear-gradient(to right, var(--color-fondo), transparent, var(--color-fondo));
+    display: none;
 }
 
-.contenido-caja {
-    text-align: center;
-    background: var(--color-caja-bg);
-    padding: 2rem;
-    border-radius: 8px;
-    border: 3px solid var(--color-texto);
-}
-
-/* Tu Gnomo */
+/* =========================================================
+   EL GNOMO PROTAGONISTA Y BOTÓN FLOTANTE
+   ========================================================= */
 .gnomo {
     width: 128px; 
     height: 128px; 
@@ -85,18 +568,234 @@ body {
     background-size: 512px 128px; 
     
     position: fixed;
-    bottom: 5%; 
+    bottom: 2%; 
     left: 50%; 
-    /* El translateX(-50%) es para que quede perfectamente centrado respecto a su propio eje */
-    transform: translateX(-50%); 
+    
+    transform: translateX(-50%) rotateY(0deg); 
+    transition: transform 0.15s ease-in-out; 
     z-index: var(--z-index-gnomo);
     
     animation: caminar 0.6s steps(4) infinite;
-    /* NUEVO: La animación arranca pausada (en el frame 1) */
     animation-play-state: paused; 
+}
+
+/* Efecto de entrada Bounce sutil al cargar la web */
+.gnomo.entrada-bounce {
+    animation: bounceEntrada 0.8s cubic-bezier(0.28, 0.84, 0.42, 1) forwards, caminar 0.6s steps(4) infinite;
+    animation-play-state: running, paused;
+}
+
+@keyframes bounceEntrada {
+    0% { transform: translateX(-50%) translateY(-120px); opacity: 0; }
+    60% { transform: translateX(-50%) translateY(0); opacity: 1; }
+    80% { transform: translateX(-50%) translateY(-12px); }
+    100% { transform: translateX(-50%) translateY(0); }
+}
+
+.gnomo.mirando-izquierda {
+    transform: translateX(-50%) rotateY(180deg);
 }
 
 @keyframes caminar {
     from { background-position: 0px; }
     to { background-position: -512px; } 
+}
+
+/* Botón Flotante de WhatsApp Estilo Pixel */
+.btn-whatsapp-flotante {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 2000;
+    width: 40px;
+    height: 40px;
+    background-color: #25D366;
+    border: 3px solid #128C7E;
+    outline: 2px solid #000000;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 32px;
+    box-shadow: 4px 4px 0px #000000;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-whatsapp-flotante:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #000000;
+    background-color: #20ba5a;
+}
+
+/* =========================================================
+   MEDIA QUERIES (RESPONSIVE)
+   ========================================================= */
+
+
+/* Tablet / Desktop Pequeño: 750px a 1050px */
+@media (min-width: 751px) and (max-width: 1050px) {
+ /*   #presentacion .contenido-caja {
+        width: 700px;
+        height: 440px;
+        padding: 3rem 80px;
+        right: 2%;
+    }
+
+    #presentacion .contenido-caja h1 {
+        font-size: 28px;
+    }
+
+    .cuadro-proyecto1 { left: 4%; top: 15%; }
+    .cuadro-proyecto2 { left: 27%; top: 22%; }
+    .cuadro-proyecto3 { left: 51%; top: 22%; }
+    .cuadro-proyecto4 { left: 74%; top: 15%; }
+
+    .cuadro-proyecto {
+        max-width: 220px;
+    }
+
+    .mensaje-final h2 {
+        font-size: 42px;
+    }*/
+}
+
+/* Mobile: 0px a 750px */
+@media (max-width: 750px) {
+   /* #presentacion .contenido-caja {
+         width: 90vw;
+        height: auto;
+        padding: 0px 10px;
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%) scaleY(0);
+        top: 5%;
+        background-size: cover;
+    }
+
+    #presentacion.visible .contenido-caja {
+        transform: translateX(-50%) scale(1.2);
+    }
+
+    #presentacion .contenido-caja em {
+    font-style: italic;
+    font-size: 10px;
+    }
+
+    #presentacion .contenido-caja h1 {
+        font-size: 18px;
+        padding: 0;
+        margin-top: 54px;
+        width: 225px;
+    }
+
+    #presentacion .contenido-caja p {
+        font-size: 13px;
+        line-height: 16px;
+        padding: 0 10px;
+    }*/
+
+    #presentacion.visible .contenido-caja {
+        transform: translate(0%, 10px) scale(0.7);
+        opacity: 1;
+        left: -63%;
+    }
+
+
+    .titulo-seccion-estante {
+        transform: scale(0.8);
+    }
+
+    .repisa-habilidades {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        max-height: 60vh;
+        transform: scale(0.8);
+        margin-top: -3px;
+    }
+
+    .titulo-seccion-estante h2 {
+        font-family: var(--font-primary);
+        font-size: 26px;
+        color: #ffd700;
+        margin-bottom: 6px;
+    }
+
+    .titulo-seccion-estante p {
+        font-family: var(--font-secondary);
+        font-size: 14px;
+        color: #e0d0b0;
+        margin-top: 2px;
+        line-height: 17px;
+    }
+
+    .etiqueta-categoria {
+        display: inline-block;
+        font-family: var(--font-primary);
+        font-size: 15px;
+    }
+
+    .categoria-pociones {
+        width: 100%;
+        padding: 8px;
+    }
+
+   .galeria-proyectos {
+        flex-direction: row;
+        align-items: center;
+        display: flex;
+        flex-wrap: balance;
+        position: relative;
+        gap: 0px;
+        margin-top: 0px;
+    }
+
+    #portafolio.visible .cuadro-proyecto {
+        opacity: 1;
+        transform: scale(0.8);
+        margin-bottom: -5px;
+    }
+
+    .cuadro-proyecto {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        max-width: 280px;
+        width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    .placa-info p {
+        font-family: var(--font-secondary);
+        font-size: 12px;
+        color: #d1c2a5;
+        line-height: 14px;
+        margin: 0;
+        min-height: 50px;
+        padding: 0px 10px;
+    }
+
+    .mensaje-final h2 {
+        font-size: 32px;
+    }
+
+    .mensaje-final p {
+        font-size: 15px;
+    }
+
+    .btn-contacto {
+        font-size: 20px;
+        padding: 8px 20px;
+    }
+
+    .btn-whatsapp-flotante {
+        width: 30px;
+        height: 30px;
+        font-size: 26px;
+        bottom: 15px;
+        right: 15px;
+    }
 }
