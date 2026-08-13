@@ -697,9 +697,10 @@ body {
     }*/
 
     #presentacion.visible .contenido-caja {
-        transform: translate(0%, 10px) scale(0.7);
+        transform: scale(0.7);
         opacity: 1;
-        left: -63%;
+        position: absolute;
+        left: -49%;
     }
 
 
@@ -797,5 +798,14 @@ body {
         font-size: 26px;
         bottom: 15px;
         right: 15px;
+    }
+}
+
+@media (max-width: 380px) {
+    #presentacion.visible .contenido-caja {
+        transform: scale(0.7);
+        opacity: 1;
+        position: absolute;
+        left: -63%;
     }
 }
